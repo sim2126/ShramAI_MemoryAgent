@@ -38,16 +38,16 @@
     {
       "relationship": "has_pattern",
       "sentiment": "neutral",
-      "source_text": "The user is involved with both 'Shram' and 'Magnet' software.",
-      "timestamp": "2025-08-03T20:43:05.969261",
+      "source_text": "The user is involved with both Shram and Magnet software.",
+      "timestamp": "2025-08-03T20:47:16.615241",
       "source": "user_main",
       "target": "Shram"
     },
     {
       "relationship": "has_pattern",
       "sentiment": "neutral",
-      "source_text": "The user is involved with both 'Shram' and 'Magnet' software.",
-      "timestamp": "2025-08-03T20:43:05.969261",
+      "source_text": "The user is involved with both Shram and Magnet software.",
+      "timestamp": "2025-08-03T20:47:16.615241",
       "source": "user_main",
       "target": "Magnet"
     },
@@ -55,7 +55,7 @@
       "relationship": "likes",
       "sentiment": "positive",
       "source_text": "My favorite color is blue.",
-      "timestamp": "2025-08-03T20:43:03.992794",
+      "timestamp": "2025-08-03T20:47:14.464342",
       "source": "user_main",
       "target": "blue"
     },
@@ -63,7 +63,7 @@
       "relationship": "is",
       "sentiment": "neutral",
       "source_text": "I am a project manager at a tech company.",
-      "timestamp": "2025-08-03T20:43:05.248192",
+      "timestamp": "2025-08-03T20:47:15.860982",
       "source": "user_main",
       "target": "project manager"
     },
@@ -71,7 +71,7 @@
       "relationship": "is",
       "sentiment": "neutral",
       "source_text": "I am a project manager at a tech company.",
-      "timestamp": "2025-08-03T20:43:05.248192",
+      "timestamp": "2025-08-03T20:47:15.860982",
       "source": "user_main",
       "target": "tech company"
     }

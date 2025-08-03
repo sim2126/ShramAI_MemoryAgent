@@ -19,8 +19,10 @@ class MemoryRetriever:
         """
         Retrieves memories contextually relevant to the query.
 
-        This method finds nodes in the graph that match keywords in the query,
-        then gathers all connected memories from the user to those nodes.
+        This more robust method checks for matches in the query against:
+        1. The name of a connected entity.
+        2. The category of a connected entity.
+        3. The original source text of the memory itself.
 
         Args:
             query (str): The user's query or topic of interest.
@@ -28,24 +30,28 @@ class MemoryRetriever:
         Returns:
             list[str]: A list of source texts from relevant memories.
         """
-        query_words = set(query.lower().split())
-        relevant_nodes = set()
-
-        # Find all nodes in the graph that match words in the query
-        for node in self.graph.nodes():
-            if node != self.user_id and node.lower() in query_words:
-                relevant_nodes.add(node)
-        
-        if not relevant_nodes:
-            return []
-
-        # Gather all unique memories (source_text) connected to these nodes
+        query_words = set(word.strip(".,?!") for word in query.lower().split())
         retrieved_memories = set()
-        for node in relevant_nodes:
-            if self.graph.has_edge(self.user_id, node):
-                # The edge data contains the original memory information
-                edge_data = self.graph.get_edge_data(self.user_id, node)
-                if edge_data and 'source_text' in edge_data:
-                    retrieved_memories.add(edge_data['source_text'])
 
+        # We iterate through all edges connected to the user, as edges represent memories.
+        for u, v, data in self.graph.edges(self.user_id, data=True):
+            # u is the user_id, v is the entity node (e.g., "Shram")
+            entity_node = self.graph.nodes[v]
+            
+            # 1. Check the entity's name
+            if v.lower() in query_words:
+                retrieved_memories.add(data['source_text'])
+                continue # Move to the next memory to avoid duplicates
+
+            # 2. Check the entity's category (type)
+            entity_type = entity_node.get('type', '').lower()
+            if entity_type and entity_type in query_words:
+                retrieved_memories.add(data['source_text'])
+                continue
+
+            # 3. Check the original source text of the memory
+            source_text_words = set(word.strip(".,?!") for word in data.get('source_text', '').lower().split())
+            if query_words.intersection(source_text_words):
+                retrieved_memories.add(data['source_text'])
+        
         return list(retrieved_memories)
