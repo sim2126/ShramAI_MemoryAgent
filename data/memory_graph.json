@@ -22,32 +22,58 @@
       "type": "PersonalDetail",
       "label": "blue",
       "id": "blue"
+    },
+    {
+      "type": "Work",
+      "label": "project manager",
+      "id": "project manager"
+    },
+    {
+      "type": "Work",
+      "label": "tech company",
+      "id": "tech company"
     }
   ],
   "links": [
     {
-      "relationship": "uses",
+      "relationship": "has_pattern",
       "sentiment": "neutral",
-      "source_text": "I use Shram and Magnet as productivity tools.",
-      "timestamp": "2025-08-03T20:40:00.023604",
+      "source_text": "The user is involved with both 'Shram' and 'Magnet' software.",
+      "timestamp": "2025-08-03T20:43:05.969261",
       "source": "user_main",
       "target": "Shram"
     },
     {
-      "relationship": "uses",
+      "relationship": "has_pattern",
       "sentiment": "neutral",
-      "source_text": "I use Shram and Magnet as productivity tools.",
-      "timestamp": "2025-08-03T20:40:00.023604",
+      "source_text": "The user is involved with both 'Shram' and 'Magnet' software.",
+      "timestamp": "2025-08-03T20:43:05.969261",
       "source": "user_main",
       "target": "Magnet"
     },
     {
-      "relationship": "favorite_color",
+      "relationship": "likes",
       "sentiment": "positive",
       "source_text": "My favorite color is blue.",
-      "timestamp": "2025-08-03T20:40:01.613326",
+      "timestamp": "2025-08-03T20:43:03.992794",
       "source": "user_main",
       "target": "blue"
+    },
+    {
+      "relationship": "is",
+      "sentiment": "neutral",
+      "source_text": "I am a project manager at a tech company.",
+      "timestamp": "2025-08-03T20:43:05.248192",
+      "source": "user_main",
+      "target": "project manager"
+    },
+    {
+      "relationship": "is",
+      "sentiment": "neutral",
+      "source_text": "I am a project manager at a tech company.",
+      "timestamp": "2025-08-03T20:43:05.248192",
+      "source": "user_main",
+      "target": "tech company"
     }
   ]
 }

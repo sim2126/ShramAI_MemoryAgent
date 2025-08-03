@@ -1,50 +1,62 @@
 from src.components.memory_encoder import MemoryEncoder
 from src.components.memory_weaver import MemoryWeaver
+from src.components.memory_retriever import MemoryRetriever
+from src.components.memory_synthesizer import MemorySynthesizer
 import json
 
 def run_demo():
-    """Runs a demonstration of the full encoding and weaving pipeline."""
-    print("--- ShramAI Memory Agent: Weaver Demo ---")
+    """Runs a full demonstration of all agent components."""
+    print("--- ShramAI Memory Agent: Full Demo ---")
 
-    # --- Memory 1 ---
-    user_statement_1 = "I use Shram and Magnet as productivity tools."
-    print(f"\n[Input 1] User statement: '{user_statement_1}'")
-
-    # Initialize our components
+    # --- Setup ---
+    # Initialize all our components. The weaver holds the graph state.
+    weaver = MemoryWeaver()
     encoder = MemoryEncoder()
-    weaver = MemoryWeaver() # This will load the existing graph or create a new one
+    retriever = MemoryRetriever(weaver)
+    synthesizer = MemorySynthesizer(weaver)
 
-    # Encode the first statement
-    print("\n[Step 1a] Encoding statement into a structured MemoryNode...")
-    memory_node_1 = encoder.encode(user_statement_1)
+    # --- Ingestion Phase ---
+    # We add a few memories to the graph.
+    statements = [
+        "I use Shram and Magnet as productivity tools.",
+        "My favorite color is blue.",
+        "I am a project manager at a tech company."
+    ]
 
-    if memory_node_1:
-        # Weave the memory into the graph
-        print("\n[Step 1b] Weaving MemoryNode into the Knowledge Graph...")
-        weaver.weave_memory(memory_node_1)
-    else:
-        print("Failed to create MemoryNode 1.")
+    for stmt in statements:
+        print(f"\nProcessing statement: '{stmt}'")
+        node = encoder.encode(stmt)
+        if node:
+            weaver.weave_memory(node)
 
-    # --- Memory 2 ---
-    user_statement_2 = "My favorite color is blue."
-    print(f"\n[Input 2] User statement: '{user_statement_2}'")
-
-    # Encode the second statement
-    print("\n[Step 2a] Encoding statement into a structured MemoryNode...")
-    memory_node_2 = encoder.encode(user_statement_2)
-    
-    if memory_node_2:
-        # Weave the second memory into the same graph
-        print("\n[Step 2b] Weaving MemoryNode into the Knowledge Graph...")
-        weaver.weave_memory(memory_node_2)
-    else:
-        print("Failed to create MemoryNode 2.")
-
-    # --- Display Graph Info ---
-    print("\n--- Final Knowledge Graph State ---")
+    print("\n--- Ingestion Complete. Current Graph State ---")
     graph_info = weaver.get_graph_info()
     print(json.dumps(graph_info, indent=2))
-    print("\nGraph data saved to 'data/memory_graph.json'")
+
+    # --- Synthesis Phase ---
+    # The agent "thinks" and creates new knowledge.
+    synthesizer.synthesize()
+
+    # --- Retrieval Phase ---
+    # Now, the user asks a question.
+    user_query = "What do you know about my productivity tools?"
+    print(f"\n--- User Query: '{user_query}' ---")
+
+    # Retrieve relevant memories using the graph.
+    relevant_memories = retriever.retrieve(user_query)
+
+    print("\n[1] Retrieved relevant memories:")
+    if relevant_memories:
+        for mem in relevant_memories:
+            print(f"- {mem}")
+        
+        # This context would then be passed to an LLM to generate a final answer.
+        context = ". ".join(relevant_memories)
+        final_prompt = f"Based on this context: '{context}'. Answer the user's question: '{user_query}'"
+        print("\n[2] This is the final context-rich prompt we would send to the LLM:")
+        print(final_prompt)
+    else:
+        print("No relevant memories found for the query.")
 
 
 if __name__ == "__main__":
