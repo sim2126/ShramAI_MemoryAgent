@@ -1,0 +1,53 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "type": "user",
+      "label": "User",
+      "id": "user_main"
+    },
+    {
+      "type": "Software",
+      "label": "Shram",
+      "id": "Shram"
+    },
+    {
+      "type": "Software",
+      "label": "Magnet",
+      "id": "Magnet"
+    },
+    {
+      "type": "PersonalDetail",
+      "label": "blue",
+      "id": "blue"
+    }
+  ],
+  "links": [
+    {
+      "relationship": "uses",
+      "sentiment": "neutral",
+      "source_text": "I use Shram and Magnet as productivity tools.",
+      "timestamp": "2025-08-03T20:40:00.023604",
+      "source": "user_main",
+      "target": "Shram"
+    },
+    {
+      "relationship": "uses",
+      "sentiment": "neutral",
+      "source_text": "I use Shram and Magnet as productivity tools.",
+      "timestamp": "2025-08-03T20:40:00.023604",
+      "source": "user_main",
+      "target": "Magnet"
+    },
+    {
+      "relationship": "favorite_color",
+      "sentiment": "positive",
+      "source_text": "My favorite color is blue.",
+      "timestamp": "2025-08-03T20:40:01.613326",
+      "source": "user_main",
+      "target": "blue"
+    }
+  ]
+}
