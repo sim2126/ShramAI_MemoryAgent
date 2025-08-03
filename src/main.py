@@ -3,10 +3,16 @@ from src.components.memory_weaver import MemoryWeaver
 from src.components.memory_retriever import MemoryRetriever
 from src.components.memory_synthesizer import MemorySynthesizer
 import json
+import os
 
 def run_demo():
     """Runs a full demonstration of all agent components."""
-    print("--- ShramAI Memory Agent: Full Demo ---")
+    print("--- ShramAI Memory Agent: Final Demo ---")
+
+    # Clean up old data for a fresh run
+    if os.path.exists("data/memory_graph.json"):
+        os.remove("data/memory_graph.json")
+        print("Cleaned up old graph data.")
 
     # --- Setup ---
     # Initialize all our components. The weaver holds the graph state.

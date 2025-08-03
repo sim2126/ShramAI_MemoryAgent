@@ -17,41 +17,41 @@ class MemoryRetriever:
 
     def retrieve(self, query: str) -> list[str]:
         """
-        Retrieves memories contextually relevant to the query.
-
-        This more robust method checks for matches in the query against:
-        1. The name of a connected entity.
-        2. The category of a connected entity.
-        3. The original source text of the memory itself.
-
-        Args:
-            query (str): The user's query or topic of interest.
-
-        Returns:
-            list[str]: A list of source texts from relevant memories.
+        Retrieves memories by checking the query against the entity's name,
+        category, and specific subcategory for a much more accurate search.
         """
-        query_words = set(word.strip(".,?!") for word in query.lower().split())
-        retrieved_memories = set()
+        stop_words = {
+            'a', 'about', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 'from', 
+            'how', 'i', 'in', 'is', 'it', 'of', 'on', 'or', 'that', 'the', 'this', 
+            'to', 'was', 'what', 'when', 'where', 'who', 'will', 'with', 'the', 
+            'my', 'do', 'you', 'know', 'am'
+        }
+        query_words = {word.strip(".,?!") for word in query.lower().split()} - stop_words
+        relevant_memories = set()
 
-        # We iterate through all edges connected to the user, as edges represent memories.
-        for u, v, data in self.graph.edges(self.user_id, data=True):
-            # u is the user_id, v is the entity node (e.g., "Shram")
-            entity_node = self.graph.nodes[v]
+        # Iterate through all memories (edges) connected to the user
+        for u, v, edge_data in self.graph.edges(self.user_id, data=True):
+            entity_node_data = self.graph.nodes[v]
             
-            # 1. Check the entity's name
+            # Check 1: Entity Name
             if v.lower() in query_words:
-                retrieved_memories.add(data['source_text'])
-                continue # Move to the next memory to avoid duplicates
-
-            # 2. Check the entity's category (type)
-            entity_type = entity_node.get('type', '').lower()
-            if entity_type and entity_type in query_words:
-                retrieved_memories.add(data['source_text'])
+                relevant_memories.add(edge_data['source_text'])
                 continue
 
-            # 3. Check the original source text of the memory
-            source_text_words = set(word.strip(".,?!") for word in data.get('source_text', '').lower().split())
-            if query_words.intersection(source_text_words):
-                retrieved_memories.add(data['source_text'])
-        
-        return list(retrieved_memories)
+            # Check 2: General Category
+            entity_type = entity_node_data.get('type', '').lower()
+            if entity_type and entity_type in query_words:
+                relevant_memories.add(edge_data['source_text'])
+                continue
+            
+            # Check 3: Specific Subcategory (This is the key fix)
+            node_subcategory = entity_node_data.get('subcategory', '').lower()
+            if node_subcategory:
+                # We split the subcategory in case it has multiple words like "Productivity Tool"
+                subcategory_words = set(node_subcategory.split())
+                # isdisjoint() is a fast way to check for any common items between two sets
+                if not query_words.isdisjoint(subcategory_words):
+                    relevant_memories.add(edge_data['source_text'])
+                    continue
+
+        return list(relevant_memories)

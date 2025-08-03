@@ -1,6 +1,6 @@
 {
   "directed": false,
-  "multigraph": false,
+  "multigraph": true,
   "graph": {},
   "nodes": [
     {
@@ -10,70 +10,98 @@
     },
     {
       "type": "Software",
+      "subcategory": "Productivity Tool",
       "label": "Shram",
       "id": "Shram"
     },
     {
       "type": "Software",
+      "subcategory": "Productivity Tool",
       "label": "Magnet",
       "id": "Magnet"
     },
     {
       "type": "PersonalDetail",
+      "subcategory": "",
       "label": "blue",
       "id": "blue"
     },
     {
       "type": "Work",
+      "subcategory": "JobTitle",
       "label": "project manager",
       "id": "project manager"
     },
     {
       "type": "Work",
+      "subcategory": "JobTitle",
       "label": "tech company",
       "id": "tech company"
     }
   ],
   "links": [
     {
-      "relationship": "has_pattern",
+      "relationship": "uses",
       "sentiment": "neutral",
-      "source_text": "The user is involved with both Shram and Magnet software.",
-      "timestamp": "2025-08-03T20:47:16.615241",
+      "source_text": "I use Shram and Magnet as productivity tools.",
+      "timestamp": "2025-08-03T21:05:45.713507",
       "source": "user_main",
-      "target": "Shram"
+      "target": "Shram",
+      "key": 0
     },
     {
       "relationship": "has_pattern",
       "sentiment": "neutral",
       "source_text": "The user is involved with both Shram and Magnet software.",
-      "timestamp": "2025-08-03T20:47:16.615241",
+      "timestamp": "2025-08-03T21:05:48.993827",
       "source": "user_main",
-      "target": "Magnet"
+      "target": "Shram",
+      "key": 1
+    },
+    {
+      "relationship": "uses",
+      "sentiment": "neutral",
+      "source_text": "I use Shram and Magnet as productivity tools.",
+      "timestamp": "2025-08-03T21:05:45.713507",
+      "source": "user_main",
+      "target": "Magnet",
+      "key": 0
+    },
+    {
+      "relationship": "has_pattern",
+      "sentiment": "neutral",
+      "source_text": "The user is involved with both Shram and Magnet software.",
+      "timestamp": "2025-08-03T21:05:48.993827",
+      "source": "user_main",
+      "target": "Magnet",
+      "key": 1
     },
     {
       "relationship": "likes",
       "sentiment": "positive",
       "source_text": "My favorite color is blue.",
-      "timestamp": "2025-08-03T20:47:14.464342",
+      "timestamp": "2025-08-03T21:05:46.946253",
       "source": "user_main",
-      "target": "blue"
+      "target": "blue",
+      "key": 0
     },
     {
       "relationship": "is",
       "sentiment": "neutral",
       "source_text": "I am a project manager at a tech company.",
-      "timestamp": "2025-08-03T20:47:15.860982",
+      "timestamp": "2025-08-03T21:05:47.972592",
       "source": "user_main",
-      "target": "project manager"
+      "target": "project manager",
+      "key": 0
     },
     {
       "relationship": "is",
       "sentiment": "neutral",
       "source_text": "I am a project manager at a tech company.",
-      "timestamp": "2025-08-03T20:47:15.860982",
+      "timestamp": "2025-08-03T21:05:47.972592",
       "source": "user_main",
-      "target": "tech company"
+      "target": "tech company",
+      "key": 0
     }
   ]
 }

@@ -22,21 +22,21 @@ class MemoryWeaver:
         self.graph = self._load_graph()
         self._ensure_user_node()
 
-    def _load_graph(self) -> nx.Graph:
+    def _load_graph(self) -> nx.MultiGraph:
         """Loads the knowledge graph from a file, or creates a new one."""
         if os.path.exists(self.graph_path):
             try:
                 with open(self.graph_path, 'r') as f:
                     data = json.load(f)
-                    return json_graph.node_link_graph(data)
+                    # Ensure we are creating a MultiGraph to allow multiple memories
+                    return json_graph.node_link_graph(data, multigraph=True)
             except (json.JSONDecodeError, nx.NetworkXError) as e:
                 print(f"Could not load or parse graph file, creating a new one. Error: {e}")
-                return nx.Graph()
-        return nx.Graph()
+                return nx.MultiGraph() # The key change is here
+        return nx.MultiGraph() # And here
 
     def _save_graph(self):
         """Saves the current knowledge graph to a file."""
-        # Ensure the data directory exists
         os.makedirs(os.path.dirname(self.graph_path), exist_ok=True)
         
         data = json_graph.node_link_data(self.graph)
@@ -52,20 +52,21 @@ class MemoryWeaver:
     def weave_memory(self, node: MemoryNode):
         """
         Adds a MemoryNode's information to the knowledge graph.
-
-        This method connects the user node to entity nodes based on the
-        information in the memory node.
         """
         content = node.get("content", {})
         entities = content.get("entities", [])
         relationship = content.get("relationship", "related_to")
         
         for entity in entities:
-            # Add the entity as a node if it doesn't exist
             if not self.graph.has_node(entity):
-                self.graph.add_node(entity, type=node.get("category"), label=entity)
+                self.graph.add_node(
+                    entity, 
+                    type=node.get("category"), 
+                    subcategory=node.get("subcategory"),
+                    label=entity
+                )
 
-            # Add an edge (a relationship) between the user and the entity
+            # add_edge on a MultiGraph creates a new, parallel edge
             self.graph.add_edge(
                 self.user_id,
                 entity,
@@ -81,6 +82,6 @@ class MemoryWeaver:
     def get_graph_info(self) -> dict:
         """Returns basic information about the current graph."""
         return {
-            "nodes": list(self.graph.nodes()),
-            "edges": list(self.graph.edges(data=True)) # data=True includes attributes
+            "nodes": list(self.graph.nodes(data=True)),
+            "edges": list(self.graph.edges(data=True))
         }
